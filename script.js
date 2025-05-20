@@ -1,5 +1,5 @@
-const apiToken = 'sk-cc05f351351f487594c0edbd0c18bdef'; 
-const apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+const apiToken = 'sk-cc05f351351f487594c0edbd0c18bdef';
+const apiUrl = 'https://api.deepseek.com/v1/chat/completions'; 
 
 async function analyzeEmotions(analysisType) {
     const text = document.getElementById('text-input').value.trim();
@@ -25,20 +25,19 @@ Identify the primary emotion (joy, sadness, anger, fear, surprise, neutral).
 Detect any secondary emotions present.
 Evaluate the emotional intensity (low, medium, high).
 Provide a brief explanation of what creates this emotional tone.
-Avoid including the original text in your response, only the analysis.`;
+Do not include the original text in your response, only the analysis.`;
     } else if (analysisType === 'advanced') {
-        prompt = `Conduct a comprehensive emotional analysis of this text: "${cleanedText}
+        prompt = `Conduct a comprehensive emotional analysis of this text: "${cleanedText}"
 
-Provide your analysis in clear,see on genre, structured sections. Focus specifically on emotional content rather than other textual features. Do not include the original text in your response.`;
+Provide your analysis in clear, structured sections. Focus specifically on emotional content rather than other textual features. Do not include the original text in your response.`;
     }
-
 
     if (customInstruction) {
         prompt += ` Additional consideration: ${customInstruction}`;
     }
 
     const data = {
-        model: 'deepseek-chat', 
+        model: 'deepseek-chat', // Using DeepSeek's model
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 1500,
         temperature: 0.7
@@ -55,7 +54,7 @@ Provide your analysis in clear,see on genre, structured sections. Focus specific
         });
 
         if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
+            throw new Error(`HTTP error: ${response.status}`);
         }
 
         const responseData = await response.json();
@@ -89,13 +88,14 @@ async function askQuestion() {
     const promptText = `Text: "${selectedText}"\n\nQuestion: ${question}\n\nAnswer the question using the text context. Focus particularly on emotional aspects if relevant.`;
 
     const data = {
-        model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
+        model: 'deepseek-chat',
         messages: [{ role: 'user', content: promptText }],
-        max_tokens: 1000
+        max_tokens: 1000,
+        temperature: 0.7
     };
 
     try {
-        const response = await fetch(ApiUrl, {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiToken}`,
@@ -185,20 +185,21 @@ function formatAnalysis(text) {
         .join('')}</div>`;
 }
 
+// UI Functions (unchanged)
 const exportBtn = document.getElementById('export-btn');
 const modal = document.getElementById('export-modal');
 const closeModal = document.getElementById('close-modal');
 const exportTxtBtn = document.getElementById('export-txt');
 
-exportBtn.addEventListener('click', function () {
+exportBtn.addEventListener('click', function() {
     modal.style.display = 'block';
 });
 
-closeModal.addEventListener('click', function () {
+closeModal.addEventListener('click', function() {
     modal.style.display = 'none';
 });
 
-exportTxtBtn.addEventListener('click', function () {
+exportTxtBtn.addEventListener('click', function() {
     const resultText = document.getElementById('result').innerText;
     const textInput = document.getElementById('text-input').value;
     const customInstruction = document.getElementById('custom-instruction').value;
@@ -248,6 +249,7 @@ async function pasteText() {
     }
 }
 
+// Event Listeners
 document.getElementById('simple-analysis-btn').addEventListener('click', () => analyzeEmotions('simple'));
 document.getElementById('advanced-analysis-btn').addEventListener('click', () => analyzeEmotions('advanced'));
 document.getElementById('paste-btn').addEventListener('click', pasteText);
