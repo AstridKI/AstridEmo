@@ -1,4 +1,4 @@
-const apiToken = 'tgp_v1_I0xGrxQwHh47_P_eDufNO1BTSJLEmnkDcF4ERMfJAoM';
+const apiToken = 'cc0ff2a5996ae1e127e6223c09506fb53981bb9cafc39600ea5a909cdc4ee823';
 const ApiUrl = 'https://api.together.xyz/v1/chat/completions';
 
 async function analyzeEmotions(analysisType) {
