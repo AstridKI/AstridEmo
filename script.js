@@ -1,5 +1,5 @@
-const apiToken = 'cc0ff2a5996ae1e127e6223c09506fb53981bb9cafc39600ea5a909cdc4ee823';
-const ApiUrl = 'https://api.together.xyz/v1/chat/completions';
+const apiToken = 'sk-cc05f351351f487594c0edbd0c18bdef'; 
+const apiUrl = 'https://api.deepseek.com/v1/chat/completions';
 
 async function analyzeEmotions(analysisType) {
     const text = document.getElementById('text-input').value.trim();
@@ -38,13 +38,14 @@ Provide your analysis in clear,see on genre, structured sections. Focus specific
     }
 
     const data = {
-        model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
+        model: 'deepseek-chat', 
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 1500
+        max_tokens: 1500,
+        temperature: 0.7
     };
 
     try {
-        const response = await fetch(ApiUrl, {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiToken}`,
@@ -54,7 +55,7 @@ Provide your analysis in clear,see on genre, structured sections. Focus specific
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
+            throw new Error(`Ошибка HTTP: ${response.status}`);
         }
 
         const responseData = await response.json();
